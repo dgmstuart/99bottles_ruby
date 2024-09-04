@@ -17,13 +17,14 @@ class Bottles
   end
 
   def verses(start_number, end_number)
-    first_verse = verse(start_number)
-    next_number = start_number - 1
-    if next_number == end_number
-      first_verse + "\n" + verse(end_number)
-    else
-      first_verse + "\n" + verses(start_number - 1, end_number)
-    end
+    remaining_verses =
+      if start_number == end_number
+        ""
+      else
+        "\n" + verses(start_number - 1, end_number)
+      end
+
+    verse(start_number) + remaining_verses
   end
 
   def song
