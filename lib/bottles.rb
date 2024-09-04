@@ -1,16 +1,9 @@
 class Bottles
-  def verse(initial_number)
-    return empty_verse if initial_number == 0
+  def verse(number)
+    return empty_verse if number == 0
 
-    line1 = "#{n_bottles_of_beer(initial_number)} on the wall, #{n_bottles_of_beer(initial_number)}.\n"
-    new_number = initial_number - 1
-    line2 =
-      if new_number > 0
-        "Take one down and pass it around, #{n_bottles_of_beer(new_number)} on the wall.\n"
-      else
-        "Take it down and pass it around, no more bottles of beer on the wall.\n"
-      end
-    line1 + line2
+    "#{n_bottles_of_beer(number)} on the wall, #{n_bottles_of_beer(number)}.\n" \
+    "Take #{item_pronoun(number)} down and pass it around, #{n_bottles_of_beer(number - 1)} on the wall.\n"
   end
 
   def verses(start_number, end_number)
@@ -35,7 +28,15 @@ class Bottles
     "Go to the store and buy some more, #{n_bottles_of_beer(99)} on the wall.\n"
   end
 
+  def item_pronoun(number)
+    number == 1 ? "it" : "one"
+  end
+
   def n_bottles_of_beer(number)
-    "#{number} bottle#{ number == 1 ? "" : "s"} of beer"
+    if number > 0
+      "#{number} bottle#{ number == 1 ? "" : "s"} of beer"
+    else
+      "no more bottles of beer"
+    end
   end
 end
