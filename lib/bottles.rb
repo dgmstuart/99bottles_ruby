@@ -1,9 +1,7 @@
 class Bottles
   def verse(number)
-    return empty_verse if number == 0
-
-    "#{n_bottles_of_beer(number)} on the wall, #{n_bottles_of_beer(number)}.\n" \
-    "Take #{item_pronoun(number)} down and pass it around, #{n_bottles_of_beer(number - 1)} on the wall.\n"
+    "#{n_bottles_of_beer(number).capitalize} on the wall, #{n_bottles_of_beer(number)}.\n" \
+    "#{action(number)}, #{n_bottles_of_beer(new_number_of_bottles(number))} on the wall.\n"
   end
 
   def verses(start_number, end_number)
@@ -23,9 +21,20 @@ class Bottles
 
   private
 
-  def empty_verse
-    "No more bottles of beer on the wall, no more bottles of beer.\n" \
-    "Go to the store and buy some more, #{n_bottles_of_beer(99)} on the wall.\n"
+  def new_number_of_bottles(current_number)
+    if current_number > 0
+      current_number - 1
+    else
+      99
+    end
+  end
+
+  def action(number_of_bottles)
+    if number_of_bottles > 0
+      "Take #{item_pronoun(number_of_bottles)} down and pass it around"
+    else
+      "Go to the store and buy some more"
+    end
   end
 
   def item_pronoun(number)
@@ -33,10 +42,8 @@ class Bottles
   end
 
   def n_bottles_of_beer(number)
-    if number > 0
-      "#{number} bottle#{ number == 1 ? "" : "s"} of beer"
-    else
-      "no more bottles of beer"
-    end
+    amount = number > 0 ? number : "no more"
+
+    "#{amount} bottle#{ number == 1 ? "" : "s"} of beer"
   end
 end
