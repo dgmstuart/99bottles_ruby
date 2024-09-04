@@ -1,7 +1,8 @@
 class Bottles
   def verse(number)
-    "#{n_bottles_of_beer(number).capitalize} on the wall, #{n_bottles_of_beer(number)}.\n" \
-    "#{action(number)}, #{n_bottles_of_beer(new_number_of_bottles(number))} on the wall.\n"
+    state = BottleStateBuilder.new.build(number)
+    "#{n_bottles_of_beer(state).capitalize} on the wall, #{n_bottles_of_beer(state)}.\n" \
+    "#{state.action}, #{n_bottles_of_beer(state.next_state)} on the wall.\n"
   end
 
   def verses(start_number, end_number)
@@ -21,29 +22,68 @@ class Bottles
 
   private
 
-  def new_number_of_bottles(current_number)
-    if current_number > 0
-      current_number - 1
-    else
-      99
-    end
+  def n_bottles_of_beer(state)
+    "#{state.amount} #{state.noun} of beer"
   end
+end
 
-  def action(number_of_bottles)
+class BottleStateBuilder
+  def build(number_of_bottles)
     if number_of_bottles > 0
-      "Take #{item_pronoun(number_of_bottles)} down and pass it around"
+      State.new(number_of_bottles, state_builder: self)
     else
-      "Go to the store and buy some more"
+      EmptyState.new(state_builder: self)
     end
   end
+end
 
-  def item_pronoun(number)
-    number == 1 ? "it" : "one"
+class State
+  def initialize(number, state_builder:)
+    @number = number
+    @state_builder = state_builder
   end
 
-  def n_bottles_of_beer(number)
-    amount = number > 0 ? number : "no more"
+  def next_state
+    @state_builder.build(@number - 1)
+  end
 
-    "#{amount} bottle#{ number == 1 ? "" : "s"} of beer"
+  def action
+    "Take #{item_pronoun} down and pass it around"
+  end
+
+  def noun
+    "bottle#{ @number == 1 ? "" : "s"}"
+  end
+
+  def amount
+    @number
+  end
+
+  private
+
+  def item_pronoun
+    @number == 1 ? "it" : "one"
+  end
+end
+
+class EmptyState
+  def initialize(state_builder:)
+    @state_builder = state_builder
+  end
+
+  def next_state
+    @state_builder.build(99)
+  end
+
+  def action
+    "Go to the store and buy some more"
+  end
+
+  def noun
+    "bottles"
+  end
+
+  def amount
+    "no more"
   end
 end
