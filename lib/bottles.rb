@@ -11,14 +11,9 @@ class Bottles
   end
 
   def verses(start_number, end_number)
-    remaining_verses =
-      if start_number == end_number
-        ""
-      else
-        "\n" + verses(start_number - 1, end_number)
-      end
-
-    verse(start_number) + remaining_verses
+    start_number.downto(end_number).map do |number|
+      verse(number)
+    end.join("\n")
   end
 
   def song
